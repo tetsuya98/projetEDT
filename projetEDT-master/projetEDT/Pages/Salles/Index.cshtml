@@ -1,0 +1,42 @@
+﻿@page
+@model projetEDT.Pages.Salles.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Créer une Salle</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Salle[0].NomSalle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Salle[0].LeBatiment)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Salle) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomSalle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeBatiment.NomBatiment)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ID">Editer</a> |
+                <a asp-page="./Details" asp-route-id="@item.ID">Détails</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ID">Supprimer</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

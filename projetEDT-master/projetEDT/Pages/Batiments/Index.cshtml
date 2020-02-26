@@ -1,0 +1,36 @@
+﻿@page
+@model projetEDT.Pages.Batiments.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Créer un Batiment</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Batiment[0].NomBatiment)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Batiment) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomBatiment)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ID">Editer</a> |
+                <a asp-page="./Details" asp-route-id="@item.ID">Détails</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ID">Supprimer</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

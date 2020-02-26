@@ -1,0 +1,34 @@
+﻿@page
+@model projetEDT.Pages.Salles.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Supprimer</h1>
+
+<h3>Êtes-vous sûr de vouloir supprimer cette Salle?</h3>
+<div>
+    <h4>Salle</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Salle.NomSalle)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Salle.NomSalle)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Salle.LeBatiment)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Salle.LeBatiment.NomBatiment)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Salle.ID" />
+        <input type="submit" value="Supprimer" class="btn btn-danger" /> |
+        <a asp-page="./Index">Retour</a>
+    </form>
+</div>

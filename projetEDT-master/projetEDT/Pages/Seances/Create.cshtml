@@ -1,0 +1,67 @@
+﻿@page
+@model projetEDT.Pages.Seances.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Créer</h1>
+
+<h4>Séance</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Seance.Jour" class="control-label"></label>
+                <input asp-for="Seance.Jour" class="form-control" />
+                <span asp-validation-for="Seance.Jour" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seance.HeureDebut" class="control-label"></label>
+                <input asp-for="Seance.HeureDebut" class="form-control" />
+                <span asp-validation-for="Seance.HeureDebut" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seance.Duree" class="control-label"></label>
+                <input asp-for="Seance.Duree" class="form-control" />
+                <span asp-validation-for="Seance.Duree" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seance.SalleID" class="control-label"></label>
+                <select asp-for="Seance.SalleID" class="form-control" asp-items="ViewBag.SalleID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seance.UEID" id="selectUE" class="control-label"></label>
+                <select asp-for="Seance.UEID" class="form-control" asp-items="ViewBag.UEID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seance.GroupeID" class="control-label"></label>
+                <select asp-for="Seance.GroupeID" class="form-control" onchange="test()">
+                    @foreach (Models.Groupe grp in Model.listGroupes)
+                    {
+                        <option value="@grp.ID" id="optionUE">@grp.toString</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seance.TypeID" class="control-label"></label>
+                <select asp-for="Seance.TypeID" class="form-control" asp-items="ViewBag.TypeID"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Créer" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Retour</a>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

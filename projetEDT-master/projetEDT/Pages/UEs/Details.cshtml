@@ -1,0 +1,31 @@
+﻿@page
+@model projetEDT.Pages.UEs.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Détails</h1>
+
+<div>
+    <h4>UE</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UE.Intitule)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UE.Intitule)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UE.Numero)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UE.Numero)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.UE.ID">Editer</a> |
+    <a asp-page="./Index">Retour</a>
+</div>

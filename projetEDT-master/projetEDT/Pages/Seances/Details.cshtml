@@ -1,0 +1,61 @@
+﻿@page
+@model projetEDT.Pages.Seances.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Détails</h1>
+
+<div>
+    <h4>Séance</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Seance.Jour)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Seance.Jour)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Seance.HeureDebut)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Seance.HeureDebut)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Seance.Duree)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Seance.Duree)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Seance.LaSalle)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Seance.LaSalle.NomSalle)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Seance.LUE)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Seance.LUE.Intitule)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Seance.LeGroupe)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Seance.LeGroupe.NomGroupe)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Seance.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Seance.Type.Intitule)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Seance.ID">Editer</a> |
+    <a asp-page="./Index">Retour</a>
+</div>
