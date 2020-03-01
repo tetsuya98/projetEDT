@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using projetEDT.Models;
 
 namespace projetEDT.Pages.Salles
 {
+    [Authorize(Roles = "Gestionnaire")]
     public class DeleteModel : PageModel
     {
         private readonly projetEDT.Data.ApplicationDbContext _context;
