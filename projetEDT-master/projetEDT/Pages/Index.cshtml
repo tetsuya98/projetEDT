@@ -1,10 +1,76 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Accueil";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Emploi du Temps</h1>
-    <!--<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>-->
+
+    <div id="calendar"> </div>
+
 </div>
+
+
+
+<script>
+    var calendarEl = document.getElementById("calendar");
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: ['dayGrid', 'timeGrid', 'list'],
+            defaultView: 'timeGridWeek',
+            allDaySlot: false,
+            minTime: "06:00:00",
+            maxTime: "21:00:00",
+            firstDay: 1, //premier jour c'est Lundi
+            buttonText: {
+                today: 'Aujourd\'hui',
+                month: 'mois',
+                week: 'semaine',
+                day: 'jour',
+                list: 'liste'
+            },
+            eventTimeFormat: {
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: false
+            },
+            locale: 'fr'//jour afficher en fr
+        });
+
+        @foreach (var item in @Model.Seance)
+        {
+            <text>
+                var date = new Date("@item.Jour.AddHours(@item.HeureDebut.Hour).AddMinutes(@item.HeureDebut.Minute).ToString("o")");
+                var datef = new Date("@item.Jour.AddHours(@item.HeureDebut.Hour).AddMinutes(@item.HeureDebut.Minute).AddHours(@item.Duree).ToString("o")");
+                var titre = "@item.LUE.Intitule" + "\n" + "[" + "@item.LaSalle.toString" + "]\n" + "[" + "@item.LeGroupe.NomGroupe" + "]\n" + "[" + "@item.Type.Intitule" + "]\n";
+
+                if ("CM".localeCompare("@item.Type.Intitule") == 0) {
+                    var couleur = ""
+                }
+                if ("TP".localeCompare("@item.Type.Intitule") == 0) {
+                    var couleur = "yellow"
+                }
+                if ("TD".localeCompare("@item.Type.Intitule") == 0) {
+                    couleur = "green"
+                }
+
+                calendar.addEvent({
+                    title: titre,
+                    start: date,
+                    end: datef,
+                    allDay: false,
+                    color: couleur
+                });
+            </text>
+        }
+
+
+        calendar.render();// Genere le calendrier
+
+    });
+
+</script>
+
