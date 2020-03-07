@@ -17,6 +17,8 @@ namespace projetEDT.Pages.Seances
     {
         private readonly projetEDT.Data.ApplicationDbContext _context;
         public List<Groupe> listGroupes = new List<Groupe>();
+        public bool testSalle = false;
+        public bool testGrp = false;
 
         public EditModel(projetEDT.Data.ApplicationDbContext context)
         {
@@ -89,6 +91,97 @@ namespace projetEDT.Pages.Seances
             }
 
             return RedirectToPage("./Index");
+
+            /*DateTime lejour = Seance.Jour;
+            int idsalle = Seance.SalleID;
+            int idgrp = (int)Seance.GroupeID;
+            DateTime lheure = Seance.HeureDebut;
+            int cpt = 0;
+            int cpt2 = 0;
+
+            var seance = from s in _context.Seance where s.Jour == lejour select s;
+            seance = seance.Where(s => s.SalleID == idsalle); //Toute les séance avec la même salle le même jour
+
+            foreach (Seance item in seance) //Vérifie que 2 séances avec la même salle ne se chevauche pas
+            {
+                var diff = (item.HeureDebut - Seance.HeureDebut).TotalHours;
+                if (diff != 0)
+                {
+                    if (diff < Seance.Duree && diff > 0)
+                    {
+                        cpt += 1;
+                        //Console.WriteLine("cpt : {0}, diff : {1}, cette seance : {2}, les seances : {3}, duree : {4}", cpt, diff, Seance.HeureDebut, item.HeureDebut, Seance.Duree);
+                    }
+                    if (diff > (item.Duree * -1) && diff < 0)
+                    {
+                        cpt += 1;
+                        //Console.WriteLine("cpt : {0}, diff : {1}, cette seance : {2}, les seances : {3}, duree {4}", cpt, diff, Seance.HeureDebut, item.HeureDebut, item.Duree);
+                    }
+
+                }
+
+            }
+
+            seance = from s in _context.Seance where s.Jour == lejour select s;
+            seance = seance.Where(s => s.GroupeID == idgrp); //Toute les séance avec le même groupe le même jour
+
+            foreach (Seance item in seance) //Vérifie que 2 séances avec le même groupe ne se chevauche pas
+            {
+                var diff = (item.HeureDebut - Seance.HeureDebut).TotalHours; //différence entre les herues de début
+                if (diff != 0)
+                {
+                    if (diff < Seance.Duree && diff > 0)
+                    {
+                        cpt2 += 1;
+                    }
+                    if (diff > (item.Duree * -1) && diff < 0)
+                    {
+                        cpt2 += 1;
+                    }
+
+                }
+
+            }
+
+            if (cpt == 0 && cpt2 == 0)
+            {
+
+                _context.Attach(Seance).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!SeanceExists(Seance.ID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return RedirectToPage("./Index");
+            }
+            else
+            {
+                if (cpt != 0)
+                {
+                    testSalle = true;
+                }
+                if (cpt2 != 0)
+                {
+                    testGrp = true;
+                }
+
+                OnGetAsync(Seance.ID);
+                return Page();
+            }*/
+
+
         }
 
         private bool SeanceExists(int id)

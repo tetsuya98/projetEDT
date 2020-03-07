@@ -9,6 +9,14 @@
 
 <h4>Séance</h4>
 <hr />
+@if (Model.testSalle)
+{
+    <h5><font color="red">Cette salle n'est pas disponible.</font></h5>
+}
+@if (Model.testGrp)
+{
+    <h5><font color="red">Ce groupe n'est pas disponible.</font></h5>
+}
 <div class="row">
     <div class="col-md-4">
         <form method="post">

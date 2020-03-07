@@ -15,7 +15,8 @@ namespace projetEDT.Pages.Seances
     public class CreateModel : PageModel
     {
         private readonly projetEDT.Data.ApplicationDbContext _context;
-        public string test;
+        public bool testSalle = false;
+        public bool testGrp = false;
 
         public List<Groupe> listGroupes = new List<Groupe>(); 
 
@@ -58,26 +59,86 @@ namespace projetEDT.Pages.Seances
                 return Page();
             }
 
-            if (Seance.GroupeID == (-1))
+            if (Seance.GroupeID == (-1)) //Ne sert à rien car j'ai commenter le groupe Tout le Monde
             {
-                Seance.GroupeID = -1;
+                Seance.GroupeID = null;
             }
-           // if (Seance.LeGroupe.toString.Contains(Seance.LUE.Intitule))
-           // {
-                  _context.Seance.Add(Seance);
-                 await _context.SaveChangesAsync();
 
-                 return RedirectToPage("./Index");
-            //}
-            //else
-            //{
-               // return Page();
-           // }
+            DateTime lejour = Seance.Jour;
+            int idsalle = Seance.SalleID;
+            int idgrp = (int)Seance.GroupeID;
+            DateTime lheure = Seance.HeureDebut;
+            int cpt = 0;
+            int cpt2 = 0;
+
+            var seance = from s in _context.Seance where s.Jour == lejour select s;
+            seance = seance.Where(s => s.SalleID == idsalle); //Toute les séance avec la même salle le même jour
+
+            foreach (Seance item in seance) //Vérifie que 2 séances avec la même salle ne se chevauche pas
+            {
+                var diff = (item.HeureDebut - Seance.HeureDebut).TotalHours;
+                if (diff != 0)
+                {
+                    if (diff < Seance.Duree && diff > 0)
+                    {
+                        cpt += 1;
+                        //Console.WriteLine("cpt : {0}, diff : {1}, cette seance : {2}, les seances : {3}, duree : {4}", cpt, diff, Seance.HeureDebut, item.HeureDebut, Seance.Duree);
+                    }
+                    if (diff > (item.Duree * -1) && diff < 0)
+                    {
+                        cpt += 1;
+                        //Console.WriteLine("cpt : {0}, diff : {1}, cette seance : {2}, les seances : {3}, duree {4}", cpt, diff, Seance.HeureDebut, item.HeureDebut, item.Duree);
+                    }
+                    
+                }
+
+            }
+
+            seance = from s in _context.Seance where s.Jour == lejour select s;
+            seance = seance.Where(s => s.GroupeID == idgrp); //Toute les séance avec le même groupe le même jour
+
+            foreach (Seance item in seance) //Vérifie que 2 séances avec le même groupe ne se chevauche pas
+            {
+                var diff = (item.HeureDebut - Seance.HeureDebut).TotalHours; //différence entre les herues de début
+                if (diff != 0)
+                {
+                    if (diff < Seance.Duree && diff > 0)
+                    {
+                        cpt2 += 1;
+                    }
+                    if (diff > (item.Duree * -1) && diff < 0)
+                    {
+                        cpt2 += 1;
+                    }
+
+                }
+
+            }
+
+            if (cpt == 0 && cpt2 == 0)
+            {
+
+                _context.Seance.Add(Seance);
+                await _context.SaveChangesAsync();
+
+                return RedirectToPage("./Index");
+            }
+            else
+            {
+                if (cpt != 0)
+                {
+                    testSalle = true;
+                }
+                if (cpt2 != 0)
+                {
+                    testGrp = true;
+                }
+
+                OnGet();
+                return Page();
+            }
 
 
-         
-
-            
         }
     }
 }

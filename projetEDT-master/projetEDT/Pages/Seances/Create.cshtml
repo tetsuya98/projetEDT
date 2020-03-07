@@ -9,6 +9,14 @@
 
 <h4>Séance</h4>
 <hr />
+@if (Model.testSalle)
+{
+    <h5><font color="red">Cette salle n'est pas disponible.</font></h5>
+}
+@if (Model.testGrp)
+{
+    <h5><font color="red">Ce groupe n'est pas disponible.</font></h5>
+}
 <div class="row">
     <div class="col-md-4">
         <form method="post">
@@ -33,7 +41,7 @@
                 <select asp-for="Seance.SalleID" class="form-control" asp-items="ViewBag.SalleID"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Seance.UEID"  class="control-label"></label>
+                <label asp-for="Seance.UEID" class="control-label"></label>
                 <select asp-for="Seance.UEID" id="selectUE" class="form-control" asp-items="ViewBag.UEID"></select>
             </div>
             <div class="form-group">

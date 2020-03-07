@@ -28,7 +28,10 @@ namespace projetEDT.Pages.Seances
                 .Include(s => s.LaSalle)
                 .ThenInclude(s => s.LeBatiment)
                 .Include(s => s.LeGroupe)
-                .Include(s => s.Type).ToListAsync();
+                .Include(s => s.Type)
+                .OrderBy(s => s.Jour)
+                .ThenBy(s => s.HeureDebut)
+                .ToListAsync();
         }
     }
 }
