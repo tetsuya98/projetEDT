@@ -32,11 +32,11 @@ namespace projetEDT.Pages.Seances
             //ViewData["GroupeID"] = new SelectList(_context.Groupe, "ID", "NomGroupe");
             ViewData["TypeID"] = new SelectList(_context.TypeSeance, "ID", "Intitule");
             var Groupes = _context.Groupe.ToList();
-            /*Groupe nullGrp = new Groupe();
+            Groupe nullGrp = new Groupe();
             nullGrp.ID = -1;
             nullGrp.NomGroupe = "Tout le Monde";
             nullGrp.LUE = new UE();
-            listGroupes.Add(nullGrp);*/
+            listGroupes.Add(nullGrp);
 
             foreach (Groupe grp in Groupes)
             {

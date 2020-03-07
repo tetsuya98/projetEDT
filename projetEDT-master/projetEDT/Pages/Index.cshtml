@@ -26,39 +26,36 @@
 
 
 <script>
-    var calendarEl = document.getElementById("calendar");
+    var calendarEl = document.getElementById("calendar"); //Je récupére mon calendrier
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () { //je l'initialise avec un EventLIstener pour pouvoir interagir avec
         var calendarEl = document.getElementById('calendar');
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        var calendar = new FullCalendar.Calendar(calendarEl, { //je crée le calendrier
             plugins: ['dayGrid', 'timeGrid', 'list'],
             defaultView: 'timeGridWeek',
+            header: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+            },
             allDaySlot: false,
-            minTime: "07:00:00",
+            minTime: "07:00:00", //les limites du calendrier
             maxTime: "21:00:00",
             firstDay: 1, //premier jour c'est Lundi
-            buttonText: {
-                today: 'Aujourd\'hui',
-                month: 'mois',
-                week: 'semaine',
-                day: 'jour',
-                list: 'liste'
-            },
             eventTimeFormat: {
                 hour: 'numeric',
                 minute: '2-digit',
                 meridiem: false
             },
-            eventClick: function (info, jsEvent, view) {
-                var contentModal = replaceString("\n", "<br>", info.event.title);
+            eventClick: function (info, jsEvent, view) { //evenement qui ouvre la modal (détail de l'evenement)
+                var contentModal = replaceString("\n", "<br>", info.event.title); //je récupère le contenue de l'evenement
                 
                 $('#modalBody').html(
-                    contentModal + "<br>" +
-                    info.event.start.toString().substring(16, 21) + " - " + info.event.end.toString().substring(16, 21)
+                    contentModal + "<br>" + //contenu de l'evenement
+                    info.event.start.toString().substring(16, 21) + " - " + info.event.end.toString().substring(16, 21) //date de l'évenement
                 );
-                $('#eventUrl').attr('href', event.url);
-                $('#calendarModal').modal();
+                $('#calendarModal').modal(); //j'affiche la modal
             },
             locale: 'fr'//jour afficher en fr
         });

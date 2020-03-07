@@ -35,10 +35,6 @@ namespace projetEDT.Pages
                 .Include(s => s.Type).ToListAsync();
         }
 
-        /*public void OnGet()
-        {
-
-        }*/
 
     }
 }
