@@ -22,7 +22,8 @@ namespace projetEDT.Models
                 {
                     return NomGroupe + " - " + LUE.Intitule;
                 }
-                if (ID == null)
+                int? tmp = ID;
+                if (tmp == null)
                 {
                     return "Tout le Monde";
                 }

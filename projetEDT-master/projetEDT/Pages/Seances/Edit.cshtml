@@ -36,12 +36,21 @@
             </div>
             <div class="form-group">
                 <label asp-for="Seance.UEID" class="control-label"></label>
-                <select asp-for="Seance.UEID" class="form-control" asp-items="ViewBag.UEID"></select>
+                <select asp-for="Seance.UEID" id="selectUE" class="form-control" asp-items="ViewBag.UEID"></select>
                 <span asp-validation-for="Seance.UEID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Seance.GroupeID" class="control-label"></label>
-                <select asp-for="Seance.GroupeID" class="form-control" asp-items="ViewBag.GroupeID"></select>
+                <select asp-for="Seance.GroupeID" id="selectGrp" class="form-control" onchange="test()">
+                    @foreach (Models.Groupe grp in Model.listGroupes)
+                    {
+                        if (@grp.toString.Equals("Tous le Monde"))
+                        {
+                            <option value="@grp.ID" id="optionUE">@grp.toString</option>
+                        }
+
+                    }
+                </select>
                 <span asp-validation-for="Seance.GroupeID" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -59,6 +68,52 @@
 <div>
     <a asp-page="./Index">Retour</a>
 </div>
+
+<script type="text/javascript">
+
+    var select = document.getElementById("selectUE"); //je récupère le select UE
+    var selectGrp = document.getElementById("selectGrp"); //je récupère le sselect Groupe
+
+    var texte;
+    texte = document.getElementById("selectUE").options[document.getElementById('selectUE').selectedIndex].text; //Je récupère le nom de l'UE
+    @foreach (Models.Groupe grp in Model.listGroupes) //Pour mettre des options au chargement de la page
+    {
+        <text> //Pour mettre du JS dans du C#
+                if ("@grp.toString".includes(texte)) { //je récupère les groupes pour l'UE choisie
+                    var opt = document.createElement('option');
+                    opt.innerHTML = "@grp.toString";
+                    opt.value = "@grp.ID";
+                    selectGrp.appendChild(opt);
+                }
+        </text>
+    }
+
+    select.addEventListener('change', function () { //Quand je chanhe d'UE
+        var texte;
+        texte = document.getElementById("selectUE").options[document.getElementById('selectUE').selectedIndex].text; //Je récupère le nom de l'UE
+        document.getElementById("selectGrp").options.length = 0; //Je vide le select Groupe
+
+        @foreach (Models.Groupe grp in Model.listGroupes) //Je parcours les groupes
+        {
+            <text> //Pour mettre du JS dans du C#
+                if ("Tout le Monde".localeCompare("@grp.toString") == 0) { //Pour mettre le groupe 'Tout le Monde'
+                var opt = document.createElement('option'); //je crée une option
+                opt.innerHTML = "@grp.toString"; //je lui donne un texte
+                opt.value = "@grp.ID"; //je lui donne une valeur
+                selectGrp.appendChild(opt); //je l'ajoute au select
+            }
+            if ("@grp.toString".includes(texte)) { //je récupère les groupes pour l'UE choisie
+                var opt = document.createElement('option');
+                opt.innerHTML = "@grp.toString";
+                opt.value = "@grp.ID";
+                selectGrp.appendChild(opt);
+            }
+            </text>
+        }
+
+    }, false);
+
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

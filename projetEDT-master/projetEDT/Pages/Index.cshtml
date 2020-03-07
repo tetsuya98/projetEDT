@@ -11,6 +11,19 @@
 </div>
 
 
+<div id="calendarModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div id="modalBody" class="modal-body"> </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <script>
     var calendarEl = document.getElementById("calendar");
@@ -22,7 +35,7 @@
             plugins: ['dayGrid', 'timeGrid', 'list'],
             defaultView: 'timeGridWeek',
             allDaySlot: false,
-            minTime: "06:00:00",
+            minTime: "07:00:00",
             maxTime: "21:00:00",
             firstDay: 1, //premier jour c'est Lundi
             buttonText: {
@@ -37,6 +50,16 @@
                 minute: '2-digit',
                 meridiem: false
             },
+            eventClick: function (info, jsEvent, view) {
+                var contentModal = replaceString("\n", "<br>", info.event.title);
+                
+                $('#modalBody').html(
+                    contentModal + "<br>" +
+                    info.event.start.toString().substring(16, 21) + " - " + info.event.end.toString().substring(16, 21)
+                );
+                $('#eventUrl').attr('href', event.url);
+                $('#calendarModal').modal();
+            },
             locale: 'fr'//jour afficher en fr
         });
 
@@ -45,7 +68,8 @@
             <text>
                 var date = new Date("@item.Jour.AddHours(@item.HeureDebut.Hour).AddMinutes(@item.HeureDebut.Minute).ToString("o")");
                 var datef = new Date("@item.Jour.AddHours(@item.HeureDebut.Hour).AddMinutes(@item.HeureDebut.Minute).AddHours(@item.Duree).ToString("o")");
-                var titre = "@item.LUE.Intitule" + "\n" + "[" + "@item.LaSalle.toString" + "]\n" + "[" + "@item.LeGroupe.NomGroupe" + "]\n" + "[" + "@item.Type.Intitule" + "]\n";
+                var titre = "@item.Type.Intitule" + "\n[cours] " + "@item.LUE.Intitule" + "\n[groupe] " + "@item.LeGroupe.NomGroupe" + "\n[salle] " + "@item.LaSalle.toString";
+                
 
                 if ("CM".localeCompare("@item.Type.Intitule") == 0) {
                     var couleur = ""
@@ -70,7 +94,19 @@
 
         calendar.render();// Genere le calendrier
 
+
     });
+
+
+    function replaceString(oldS, newS, fullS) { //Fonction qui remplace une sous-chaine dans une chaine
+        // On remplace oldS avec newS dans fullS
+        for (var i = 0; i < fullS.length; i++) {
+            if (fullS.substring(i, i + oldS.length) == oldS) {
+                fullS = fullS.substring(0, i) + newS + fullS.substring(i + oldS.length, fullS.length);
+            }
+        }
+        return fullS;
+    }
 
 </script>
 

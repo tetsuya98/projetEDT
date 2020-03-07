@@ -16,6 +16,7 @@ namespace projetEDT.Pages.Seances
     public class EditModel : PageModel
     {
         private readonly projetEDT.Data.ApplicationDbContext _context;
+        public List<Groupe> listGroupes = new List<Groupe>();
 
         public EditModel(projetEDT.Data.ApplicationDbContext context)
         {
@@ -45,8 +46,18 @@ namespace projetEDT.Pages.Seances
             }
            ViewData["UEID"] = new SelectList(_context.UE, "ID", "Intitule");
            ViewData["SalleID"] = new SelectList(_context.Salle, "ID", "toString");
-           ViewData["GroupeID"] = new SelectList(_context.Groupe, "ID", "toString");
+           //ViewData["GroupeID"] = new SelectList(_context.Groupe, "ID", "toString");
            ViewData["TypeID"] = new SelectList(_context.TypeSeance, "ID", "Intitule");
+            var Groupes = _context.Groupe.ToList();
+            Groupe nullGrp = new Groupe();
+            nullGrp.ID = -1;
+            nullGrp.NomGroupe = "Tous le Monde";
+            listGroupes.Add(nullGrp);
+
+            foreach (Groupe grp in Groupes)
+            {
+                listGroupes.Add(grp);
+            }
             return Page();
         }
 

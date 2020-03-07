@@ -58,7 +58,7 @@ namespace projetEDT.Pages.Seances
 
             if (Seance.GroupeID == (-1))
             {
-                Seance.GroupeID = null;
+                Seance.GroupeID = -1;
             }
            // if (Seance.LeGroupe.toString.Contains(Seance.LUE.Intitule))
            // {
