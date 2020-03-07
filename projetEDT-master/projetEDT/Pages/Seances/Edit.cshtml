@@ -42,7 +42,7 @@
             <div class="form-group">
                 <label asp-for="Seance.GroupeID" class="control-label"></label>
                 <select asp-for="Seance.GroupeID" id="selectGrp" class="form-control" onchange="test()">
-                    @foreach (Models.Groupe grp in Model.listGroupes)
+                    @foreach (Models.Groupe grp in Model.listGroupes) //Ne sert à rien car j'ai commenter le groupe Tout le Monde
                     {
                         if (@grp.toString.Equals("Tous le Monde"))
                         {
@@ -96,10 +96,10 @@
         @foreach (Models.Groupe grp in Model.listGroupes) //Je parcours les groupes
         {
             <text> //Pour mettre du JS dans du C#
-                if ("Tout le Monde".localeCompare("@grp.toString") == 0) { //Pour mettre le groupe 'Tout le Monde'
+                if ("Tout le Monde".localeCompare("*/@grp.toString/*") == 0) { //Pour mettre le groupe 'Tout le Monde'
                 var opt = document.createElement('option'); //je crée une option
-                opt.innerHTML = "@grp.toString"; //je lui donne un texte
-                opt.value = "@grp.ID"; //je lui donne une valeur
+                opt.innerHTML = "*/@grp.toString/*"; //je lui donne un texte
+                opt.value = "*/@grp.ID/*"; //je lui donne une valeur
                 selectGrp.appendChild(opt); //je l'ajoute au select
             }
             if ("@grp.toString".includes(texte)) { //je récupère les groupes pour l'UE choisie
