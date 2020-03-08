@@ -9,14 +9,9 @@
 
 <h4>Séance</h4>
 <hr />
-@if (Model.testSalle) //Salle non disponible
-{
-    <h5><font color="red">Cette salle n'est pas disponible.</font></h5>
-}
-@if (Model.testGrp) //Groupe non disponible
-{
-    <h5><font color="red">Ce groupe n'est pas disponible.</font></h5>
-}
+
+
+
 <div class="row">
     <div class="col-md-4">
         <form method="post">
@@ -25,11 +20,19 @@
                 <label asp-for="Seance.Jour" class="control-label"></label>
                 <input asp-for="Seance.Jour" class="form-control" />
                 <span asp-validation-for="Seance.Jour" class="text-danger"></span>
+                @if (Model.testDate) //Pas de cours le dimanche
+                {
+                    <span class="text-danger">Pas de cours le dimanche.</span>
+                }
             </div>
             <div class="form-group">
                 <label asp-for="Seance.HeureDebut" class="control-label"></label>
                 <input asp-for="Seance.HeureDebut" class="form-control" />
                 <span asp-validation-for="Seance.HeureDebut" class="text-danger"></span>
+                @if (Model.testTime) //Trop tôt/tard
+                {
+                    <span class="text-danger">Une séance doit avoir lieur entre 07h et 21h</span>
+                }
             </div>
             <div class="form-group">
                 <label asp-for="Seance.Duree" class="control-label"></label>
@@ -39,6 +42,10 @@
             <div class="form-group">
                 <label asp-for="Seance.SalleID" class="control-label"></label>
                 <select asp-for="Seance.SalleID" class="form-control" asp-items="ViewBag.SalleID"></select>
+                @if (Model.testSalle) //Salle non disponible
+                {
+                    <span class="text-danger">Cette salle n'est pas disponible.</span>
+                }
             </div>
             <div class="form-group">
                 <label asp-for="Seance.UEID" class="control-label"></label>
@@ -46,9 +53,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="Seance.GroupeID" class="control-label"></label>
-                <select asp-for="Seance.GroupeID" id="selectGrp" class="form-control" onchange="test()">
-
-                </select>
+                <select asp-for="Seance.GroupeID" id="selectGrp" class="form-control"></select>
+                @if (Model.testGrp) //Groupe non disponible
+                {
+                    <span class="text-danger">Ce groupe n'est pas disponible.</span>
+                }
             </div>
             <div class="form-group">
                 <label asp-for="Seance.TypeID" class="control-label"></label>

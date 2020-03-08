@@ -19,6 +19,8 @@ namespace projetEDT.Pages.Seances
         public List<Groupe> listGroupes = new List<Groupe>();
         public bool testSalle = false;
         public bool testGrp = false;
+        public bool testTime = false;
+        public bool testDate = false;
 
         public EditModel(projetEDT.Data.ApplicationDbContext context)
         {
@@ -96,6 +98,8 @@ namespace projetEDT.Pages.Seances
 
             return RedirectToPage("./Index");*/
 
+            
+
             //Je récupère les infos de la séance que je veux créer
             DateTime lejour = Seance.Jour;
             int idsalle = Seance.SalleID;
@@ -103,6 +107,29 @@ namespace projetEDT.Pages.Seances
             int? SID = Seance.ID;
             int cpt = 0; //Compteur pour savoir si il y a des indisponibilités
             int cpt2 = 0;
+            int cpt3 = 0;
+            int cpt4 = 0;
+
+            DateTime tot = new DateTime(2010, 10, 10, 7, 0, 0); //Pas cours avant 7h
+            var diff = (tot.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours;
+            Console.WriteLine(diff);
+            if (diff > 0)
+            {
+                cpt3 += 1;
+            }
+
+            DateTime tard = new DateTime(2010, 10, 10, 21, 0, 0); //Pad cours après 21h
+            diff = (tard.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours;
+            Console.WriteLine(diff);
+            if (diff <= 0)
+            {
+                cpt3 += 1;
+            }
+
+            if ((int)Seance.Jour.DayOfWeek == 0) //Pas de cours le dimanche
+            {
+                cpt4 += 4;
+            }
 
             var seance = from s in _context.Seance where s.Jour == lejour select s;
             seance = seance.Where(s => s.SalleID == idsalle); //Toute les séance avec la même salle le même jour
@@ -110,7 +137,7 @@ namespace projetEDT.Pages.Seances
 
             foreach (Seance item in seance) //Vérifie que 2 séances avec la même salle ne se chevauche pas
             {
-                var diff = (item.HeureDebut.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours;
+                 diff = (item.HeureDebut.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours;
                 if (diff != 0)
                 {
                     if (diff < Seance.Duree && diff > 0) //Si ma séance est avant mais en chevauche une après
@@ -151,7 +178,7 @@ namespace projetEDT.Pages.Seances
 
             foreach (Seance item in seance) //Vérifie que 2 séances avec le même groupe ne se chevauche pas
             {
-                var diff = (item.HeureDebut.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours; //différence entre les herues de début
+                 diff = (item.HeureDebut.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours; //différence entre les herues de début
                 if (diff != 0)
                 {
                     if (diff < Seance.Duree && diff > 0) //Si ma séance est avant mais en chevauche une après
@@ -171,7 +198,7 @@ namespace projetEDT.Pages.Seances
 
             }
              
-            if (cpt == 0 && cpt2 == 0) //Si il n'y a pas d'indisponibilité
+            if (cpt == 0 && cpt2 == 0 && cpt3 == 0 && cpt4 == 0) //Si il n'y a pas d'indisponibilité
             {
 
                 _context.Attach(Seance).State = EntityState.Modified; //Je récupère mes modifications
@@ -203,6 +230,14 @@ namespace projetEDT.Pages.Seances
                 if (cpt2 != 0) //Groupe non disponiblie
                 {
                     testGrp = true; //affiche l'indisponibilité
+                }
+                if (cpt3 != 0) //Trop tôt/tard
+                {
+                    testTime = true; //Afficher l'indisponibilité
+                }
+                if (cpt4 != 0) //Cours le Dimanche
+                {
+                    testDate = true; //Afficher l'indisponibilité
                 }
 
                 _context.Attach(Seance).State = EntityState.Modified; //Pour pouvoir recharger la page sans créer de conflit
