@@ -66,7 +66,6 @@ namespace projetEDT.Pages.Seances
 
             DateTime lejour = Seance.Jour;
             int idsalle = Seance.SalleID;
-            int idgrp = (int)Seance.GroupeID;
             DateTime lheure = Seance.HeureDebut;
             int cpt = 0;
             int cpt2 = 0;
@@ -99,8 +98,17 @@ namespace projetEDT.Pages.Seances
 
             }
 
-            seance = from s in _context.Seance where s.Jour == lejour select s;
-            seance = seance.Where(s => s.GroupeID == idgrp); //Toute les séance avec le même groupe le même jour
+            if (Seance.GroupeID == null)
+            {
+                int? nl = null;
+                seance = from s in _context.Seance where s.Jour == lejour select s;
+                seance = seance.Where(s => s.GroupeID == nl); //Toute les séance avec le même groupe le même jour
+            } else
+            {
+                int idgrp = (int)Seance.GroupeID;
+                seance = from s in _context.Seance where s.Jour == lejour select s;
+                seance = seance.Where(s => s.GroupeID == idgrp); //Toute les séance avec le même groupe le même jour
+            }
 
             foreach (Seance item in seance) //Vérifie que 2 séances avec le même groupe ne se chevauche pas
             {

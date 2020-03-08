@@ -47,14 +47,7 @@
             <div class="form-group">
                 <label asp-for="Seance.GroupeID" class="control-label"></label>
                 <select asp-for="Seance.GroupeID" id="selectGrp" class="form-control" onchange="test()">
-                    @foreach (Models.Groupe grp in Model.listGroupes) //Ne sert à rien car j'ai commmenté le groupe Tout le Monde
-                    {
-                        if (@grp.NomGroupe.Equals("Tout le Monde"))
-                        {
-                            <option value="@grp.ID" id="optionUE">@grp.toString</option>
-                        }
 
-                    }
                 </select>
             </div>
             <div class="form-group">
@@ -74,7 +67,7 @@
 
 <script type="text/javascript">
 
-    var select = document.getElementById("selectUE"); //je récupère le select UE
+   var select = document.getElementById("selectUE"); //je récupère le select UE
     var selectGrp = document.getElementById("selectGrp"); //je récupère le sselect Groupe
 
     var texte;
@@ -82,6 +75,12 @@
     @foreach (Models.Groupe grp in Model.listGroupes) //Pour mettre des options au chargement de la page
     {
         <text> //Pour mettre du JS dans du C#
+                if ("@grp.toString".includes("Tout le Monde")) { //je récupère le groupe Tout le Monde
+                    var opt = document.createElement('option');
+                    opt.innerHTML = "Tout le Monde";
+                    opt.value = "@grp.ID";
+                    selectGrp.appendChild(opt);
+                }
                 if ("@grp.toString".includes(texte)) { //je récupère les groupes pour l'UE choisie
                     var opt = document.createElement('option');
                     opt.innerHTML = "@grp.toString";
@@ -99,9 +98,9 @@
         @foreach (Models.Groupe grp in Model.listGroupes) //Je parcours les groupes
         {
             <text> //Pour mettre du JS dans du C#
-                if ("Tout le Monde".localeCompare("@grp.NomGroupe") == 0) { //Pour mettre le groupe 'Tout le Monde'
+                if ("@grp.toString".includes("Tout le Monde")) { //Pour mettre le groupe 'Tout le Monde'
                 var opt = document.createElement('option'); //je crée une option
-                opt.innerHTML = "@grp.toString"; //je lui donne un texte
+                opt.innerHTML = "Tout le Monde"; //je lui donne un texte
                 opt.value = "@grp.ID"; //je lui donne une valeur
                 selectGrp.appendChild(opt); //je l'ajoute au select
             }

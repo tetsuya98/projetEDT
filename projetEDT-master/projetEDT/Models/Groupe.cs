@@ -21,12 +21,7 @@ namespace projetEDT.Models
                 if (LUE != null)
                 {
                     return NomGroupe + " - " + LUE.Intitule;
-                }
-                int? tmp = ID;
-                if (tmp == null)
-                {
-                    return "Tout le Monde";
-                }
+                }      
                 return NomGroupe;
             }
         }

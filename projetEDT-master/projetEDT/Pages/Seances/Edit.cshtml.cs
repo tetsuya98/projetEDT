@@ -51,10 +51,10 @@ namespace projetEDT.Pages.Seances
            //ViewData["GroupeID"] = new SelectList(_context.Groupe, "ID", "toString");
            ViewData["TypeID"] = new SelectList(_context.TypeSeance, "ID", "Intitule");
             var Groupes = _context.Groupe.ToList();
-            /*Groupe nullGrp = new Groupe();
+            Groupe nullGrp = new Groupe();
             nullGrp.ID = -1;
-            nullGrp.NomGroupe = "Tous le Monde";
-            listGroupes.Add(nullGrp);*/
+            nullGrp.NomGroupe = "Tout le Monde";
+            listGroupes.Add(nullGrp);
 
             foreach (Groupe grp in Groupes)
             {
@@ -70,6 +70,10 @@ namespace projetEDT.Pages.Seances
             if (!ModelState.IsValid)
             {
                 return Page();
+            }
+            if (Seance.GroupeID == (-1)) //Ne sert à rien car j'ai commenter le groupe Tout le Monde
+            {
+                Seance.GroupeID = null;
             }
 
             /*_context.Attach(Seance).State = EntityState.Modified;
@@ -94,7 +98,6 @@ namespace projetEDT.Pages.Seances
 
             DateTime lejour = Seance.Jour;
             int idsalle = Seance.SalleID;
-            int idgrp = (int)Seance.GroupeID;
             DateTime lheure = Seance.HeureDebut;
             int? SID = Seance.ID;
             int cpt = 0;
@@ -128,9 +131,22 @@ namespace projetEDT.Pages.Seances
 
             }
 
-            seance = from s in _context.Seance where s.Jour == lejour select s;
-            seance = seance.Where(s => s.GroupeID == idgrp); //Toute les séance avec le même groupe le même jour
-            seance = seance.Where(s => s.ID != SID); //Pour qu'il puisse se sauvegarder sans modification
+            if (Seance.GroupeID == null)
+            {
+                int? nl = null;
+                seance = from s in _context.Seance where s.Jour == lejour select s;
+                seance = seance.Where(s => s.GroupeID == nl); //Toute les séance avec le même groupe le même jour
+                seance = seance.Where(s => s.ID != SID); //Pour qu'il puisse se sauvegarder sans modification
+            }
+            else
+            {
+                int idgrp = (int)Seance.GroupeID;
+                seance = from s in _context.Seance where s.Jour == lejour select s;
+                seance = seance.Where(s => s.GroupeID == idgrp); //Toute les séance avec le même groupe le même jour
+                seance = seance.Where(s => s.ID != SID); //Pour qu'il puisse se sauvegarder sans modification
+            }
+
+            
 
             foreach (Seance item in seance) //Vérifie que 2 séances avec le même groupe ne se chevauche pas
             {

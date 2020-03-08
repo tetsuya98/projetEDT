@@ -50,7 +50,7 @@
             },
             eventClick: function (info, jsEvent, view) { //evenement qui ouvre la modal (détail de l'evenement)
                 var contentModal = replaceString("\n", "<br>", info.event.title); //je récupère le contenue de l'evenement
-                
+
                 $('#modalBody').html(
                     contentModal + "<br>" + //contenu de l'evenement
                     info.event.start.toString().substring(16, 21) + " - " + info.event.end.toString().substring(16, 21) //date de l'évenement
@@ -65,8 +65,20 @@
             <text>
                 var date = new Date("@item.Jour.AddHours(@item.HeureDebut.Hour).AddMinutes(@item.HeureDebut.Minute).ToString("o")");
                 var datef = new Date("@item.Jour.AddHours(@item.HeureDebut.Hour).AddMinutes(@item.HeureDebut.Minute).AddHours(@item.Duree).ToString("o")");
-                var titre = "@item.Type.Intitule" + "\n[cours] " + "@item.LUE.Intitule" + "\n[groupe] " + "@item.LeGroupe.NomGroupe" + "\n[salle] " + "@item.LaSalle.toString";
-                
+                @if (@item.GroupeID == null)
+                {
+                    <text>
+                        var titre = "@item.Type.Intitule" + "\n[cours] " + "@item.LUE.Intitule" + "\n[groupe] " + "Tout le Monde" + "\n[salle] " + "@item.LaSalle.toString";
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        var titre = "@item.Type.Intitule" + "\n[cours] " + "@item.LUE.Intitule" + "\n[groupe] " + "@item.LeGroupe.NomGroupe" + "\n[salle] " + "@item.LaSalle.toString";
+                    </text>
+                }
+
+
 
                 if ("CM".localeCompare("@item.Type.Intitule") == 0) {
                     var couleur = ""
