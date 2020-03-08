@@ -4,17 +4,15 @@
     ViewData["Title"] = "Accueil";
 }
 
-<div class="text-center">
+    <div class="text-center">
+        <!--L'Emploi du temps-->
+        <div id="calendar"> </div>
+    </div>
 
-    <div id="calendar"> </div>
-
-</div>
-
-
+<!--Modal cnotenant le déatil d'une séance-->
 <div id="calendarModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <div id="modalBody" class="modal-body"> </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -32,22 +30,18 @@
         var calendarEl = document.getElementById('calendar');
 
         var calendar = new FullCalendar.Calendar(calendarEl, { //je crée le calendrier
-            plugins: ['dayGrid', 'timeGrid', 'list'],
-            defaultView: 'timeGridWeek',
-            header: {
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+            plugins: ['dayGrid', 'timeGrid', 'list'], //Plugin pour avoir des vues Mois/Jour/Semaine/Liste
+            defaultView: 'timeGridWeek', //Vue par defaut : Semaine
+            hiddenDays: [ 0 ], //cache le dimanche
+            header: { //Toolbar au dessus de l'emploi du temps
+              left: 'prev,next today', //Passage à la période precedente/suivante/retour à la période actuelle
+              center: 'title', //nom de la période (ex : 2 - 8 mars)
+              right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth' //accès aux diffèrentes vues : Mois/Semaine/Jour/Liste
             },
-            allDaySlot: false,
-            minTime: "07:00:00", //les limites du calendrier
+            allDaySlot: false, //Pas d'événement sur toute la journée
+            minTime: "07:00:00", //les limites de l'emploi du temps
             maxTime: "21:00:00",
             firstDay: 1, //premier jour c'est Lundi
-            eventTimeFormat: {
-                hour: 'numeric',
-                minute: '2-digit',
-                meridiem: false
-            },
             eventClick: function (info, jsEvent, view) { //evenement qui ouvre la modal (détail de l'evenement)
                 var contentModal = replaceString("\n", "<br>", info.event.title); //je récupère le contenue de l'evenement
 
@@ -60,48 +54,48 @@
             locale: 'fr'//jour afficher en fr
         });
 
-        @foreach (var item in @Model.Seance)
+        @foreach (var item in @Model.Seance) //On parcours les séances pour les afficher
         {
-            <text>
-                var date = new Date("@item.Jour.AddHours(@item.HeureDebut.Hour).AddMinutes(@item.HeureDebut.Minute).ToString("o")");
-                var datef = new Date("@item.Jour.AddHours(@item.HeureDebut.Hour).AddMinutes(@item.HeureDebut.Minute).AddHours(@item.Duree).ToString("o")");
-                @if (@item.GroupeID == null)
+            <text> //Pour du JS dans du C#
+                var date = new Date("@item.Jour.AddHours(@item.HeureDebut.Hour).AddMinutes(@item.HeureDebut.Minute).ToString("o")"); //Je récupère la date de début et la converti au bon format
+                var datef = new Date("@item.Jour.AddHours(@item.HeureDebut.Hour).AddMinutes(@item.HeureDebut.Minute).AddHours(@item.Duree).ToString("o")"); //Je récupère la date de fin et la converti au bon format
+                @if (@item.GroupeID == null) //Si il n'y a pas de groupe (Tout le Monde)
                 {
                     <text>
-                        var titre = "@item.Type.Intitule" + "\n[cours] " + "@item.LUE.Intitule" + "\n[groupe] " + "Tout le Monde" + "\n[salle] " + "@item.LaSalle.toString";
+                        var titre = "@item.Type.Intitule" + "\n[cours] " + "@item.LUE.toString" + "\n[groupe] " + "Tout le Monde" + "\n[salle] " + "@item.LaSalle.toString"; //Contenu de la séance
                     </text>
                 }
-                else
+                else //Si il y a un groupe
                 {
                     <text>
-                        var titre = "@item.Type.Intitule" + "\n[cours] " + "@item.LUE.Intitule" + "\n[groupe] " + "@item.LeGroupe.NomGroupe" + "\n[salle] " + "@item.LaSalle.toString";
+                        var titre = "@item.Type.Intitule" + "\n[cours] " + "@item.LUE.toString" + "\n[groupe] " + "@item.LeGroupe.NomGroupe" + "\n[salle] " + "@item.LaSalle.toString"; //Contenu de la séance
                     </text>
                 }
 
 
 
-                if ("CM".localeCompare("@item.Type.Intitule") == 0) {
-                    var couleur = ""
+                if ("CM".localeCompare("@item.Type.Intitule") == 0) { //Si la séance est un CM
+                    var couleur = "" //Bleu
                 }
-                if ("TP".localeCompare("@item.Type.Intitule") == 0) {
-                    var couleur = "yellow"
+                if ("TP".localeCompare("@item.Type.Intitule") == 0) { //Si la séance est un TP
+                    var couleur = "yellow" //Jaune
                 }
-                if ("TD".localeCompare("@item.Type.Intitule") == 0) {
-                    couleur = "green"
+                if ("TD".localeCompare("@item.Type.Intitule") == 0) { //Si la séance est un TD
+                    couleur = "green" //Vert
                 }
 
-                calendar.addEvent({
+                calendar.addEvent({ //J'ajoute la séance à l'emploi du temps
                     title: titre,
                     start: date,
                     end: datef,
-                    allDay: false,
                     color: couleur
                 });
             </text>
         }
 
 
-        calendar.render();// Genere le calendrier
+        calendar.render();// affiche
+        le calendrier
 
 
     });

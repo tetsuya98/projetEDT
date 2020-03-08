@@ -27,7 +27,7 @@ namespace projetEDT.Pages
 
         public async Task OnGetAsync()
         {
-            Seance = await _context.Seance
+            Seance = await _context.Seance //Je récupère l'ensemble des séance
                 .Include(s => s.LUE)
                 .Include(s => s.LaSalle)
                 .ThenInclude(s => s.LeBatiment)

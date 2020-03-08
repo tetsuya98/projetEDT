@@ -50,13 +50,13 @@ namespace projetEDT.Pages.Seances
            ViewData["SalleID"] = new SelectList(_context.Salle, "ID", "toString");
            //ViewData["GroupeID"] = new SelectList(_context.Groupe, "ID", "toString");
            ViewData["TypeID"] = new SelectList(_context.TypeSeance, "ID", "Intitule");
-            var Groupes = _context.Groupe.ToList();
-            Groupe nullGrp = new Groupe();
+            var Groupes = _context.Groupe.ToList(); //Je récupère les groupes pour avoir leur UE avec
+            Groupe nullGrp = new Groupe(); //Je créer un groupe Tout le Monde
             nullGrp.ID = -1;
             nullGrp.NomGroupe = "Tout le Monde";
             listGroupes.Add(nullGrp);
 
-            foreach (Groupe grp in Groupes)
+            foreach (Groupe grp in Groupes) //Je remplis ma liste avec mes groupes
             {
                 listGroupes.Add(grp);
             }
@@ -71,7 +71,7 @@ namespace projetEDT.Pages.Seances
             {
                 return Page();
             }
-            if (Seance.GroupeID == (-1)) //Ne sert à rien car j'ai commenter le groupe Tout le Monde
+            if (Seance.GroupeID == (-1)) //Si mon groupe est Tout le Monde
             {
                 Seance.GroupeID = null;
             }
@@ -96,49 +96,50 @@ namespace projetEDT.Pages.Seances
 
             return RedirectToPage("./Index");*/
 
+            //Je récupère les infos de la séance que je veux créer
             DateTime lejour = Seance.Jour;
             int idsalle = Seance.SalleID;
             DateTime lheure = Seance.HeureDebut;
             int? SID = Seance.ID;
-            int cpt = 0;
+            int cpt = 0; //Compteur pour savoir si il y a des indisponibilités
             int cpt2 = 0;
 
             var seance = from s in _context.Seance where s.Jour == lejour select s;
             seance = seance.Where(s => s.SalleID == idsalle); //Toute les séance avec la même salle le même jour
-            seance = seance.Where(s => s.ID != SID); //Pour qu'il puisse se sauvegarder sans modification
+            seance = seance.Where(s => s.ID != SID); //Pour qu'il puisse sauvegarder sans modification
 
             foreach (Seance item in seance) //Vérifie que 2 séances avec la même salle ne se chevauche pas
             {
                 var diff = (item.HeureDebut.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours;
                 if (diff != 0)
                 {
-                    if (diff < Seance.Duree && diff > 0)
+                    if (diff < Seance.Duree && diff > 0) //Si ma séance est avant mais en chevauche une après
                     {
                         cpt += 1;
                         //Console.WriteLine("cpt : {0}, diff : {1}, cette seance : {2}, les seances : {3}, duree : {4}", cpt, diff, Seance.HeureDebut, item.HeureDebut, Seance.Duree);
                     }
-                    if (diff > (item.Duree * -1) && diff < 0)
+                    if (diff > (item.Duree * -1) && diff < 0) //Si ma séance est après mais en chevauche une avant
                     {
                         cpt += 1;
                         //Console.WriteLine("cpt : {0}, diff : {1}, cette seance : {2}, les seances : {3}, duree {4}", cpt, diff, Seance.HeureDebut, item.HeureDebut, item.Duree);
                     }
 
                 }
-                else
+                else //Si ma séance est en même temps qu'une autre
                 {
                     cpt += 1;
                 }
 
             }
 
-            if (Seance.GroupeID == null)
+            if (Seance.GroupeID == null) //Si le groupe est Tout le Monde
             {
                 int? nl = null;
                 seance = from s in _context.Seance where s.Jour == lejour select s;
                 seance = seance.Where(s => s.GroupeID == nl); //Toute les séance avec le même groupe le même jour
                 seance = seance.Where(s => s.ID != SID); //Pour qu'il puisse se sauvegarder sans modification
             }
-            else
+            else //Sinon
             {
                 int idgrp = (int)Seance.GroupeID;
                 seance = from s in _context.Seance where s.Jour == lejour select s;
@@ -153,31 +154,31 @@ namespace projetEDT.Pages.Seances
                 var diff = (item.HeureDebut.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours; //différence entre les herues de début
                 if (diff != 0)
                 {
-                    if (diff < Seance.Duree && diff > 0)
+                    if (diff < Seance.Duree && diff > 0) //Si ma séance est avant mais en chevauche une après
                     {
                         cpt2 += 1;
                     }
-                    if (diff > (item.Duree * -1) && diff < 0)
+                    if (diff > (item.Duree * -1) && diff < 0) //Si ma séance est après mais en chevauche une avant
                     {
                         cpt2 += 1;
                     }
 
                 }
-                else
+                else //Si ma séance est en même temps qu'une autre
                 {
                     cpt2 += 1;
                 }
 
             }
-
-            if (cpt == 0 && cpt2 == 0)
+             
+            if (cpt == 0 && cpt2 == 0) //Si il n'y a pas d'indisponibilité
             {
 
-                _context.Attach(Seance).State = EntityState.Modified;
+                _context.Attach(Seance).State = EntityState.Modified; //Je récupère mes modifications
 
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync(); //Je sauvegarde mes modifications dans la base
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -191,23 +192,23 @@ namespace projetEDT.Pages.Seances
                     }
                 }
 
-                return RedirectToPage("./Index");
+                return RedirectToPage("./Index"); //Je retourne à l'index
             }
-            else
+            else //Si il y a des indisponibilités
             {
-                if (cpt != 0)
+                if (cpt != 0) //Salle non disponible
                 {
-                    testSalle = true;
+                    testSalle = true; //affiche l'indisponibilité
                 }
-                if (cpt2 != 0)
+                if (cpt2 != 0) //Groupe non disponiblie
                 {
-                    testGrp = true;
+                    testGrp = true; //affiche l'indisponibilité
                 }
 
-                _context.Attach(Seance).State = EntityState.Modified;
+                _context.Attach(Seance).State = EntityState.Modified; //Pour pouvoir recharger la page sans créer de conflit
                 
-                OnGetAsync(SID);
-                return Page();
+                OnGetAsync(SID); //Je récupère les entités pour pouvoir modifier une séance
+                return Page(); //Je recharge la page
             }
 
 

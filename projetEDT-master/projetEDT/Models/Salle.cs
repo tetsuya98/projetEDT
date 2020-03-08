@@ -14,8 +14,9 @@ namespace projetEDT.Models
         public String NomSalle { get; set; }
         [Display(Name = "Batiment")]
         public int BatimentID { get; set; }
+        [Display(Name = "Batiment")]
         public Batiment LeBatiment { get; set; }
-        public string toString
+        public string toString //Affichage du nom de la salle avec son batiment
         {
             get
             {

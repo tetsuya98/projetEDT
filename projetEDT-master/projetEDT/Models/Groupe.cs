@@ -12,9 +12,11 @@ namespace projetEDT.Models
         [Required]
         [Display(Name = "Groupe")]
         public String NomGroupe { get; set; }
+        [Display(Name = "UE")]
         public int UEID { get; set; }
+        [Display(Name = "UE")]
         public UE LUE { get; set; }
-        public string toString
+        public string toString //Affichage du groupe avec son UE
         {
             get
             {

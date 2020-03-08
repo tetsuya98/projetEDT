@@ -15,7 +15,8 @@ namespace projetEDT.Models
         public String Numero { get; set; }
         public ICollection<Seance> LesSeances { get; set; }
         public ICollection<Groupe> LesGroupes { get; set; }
-        public string toString
+        [Display(Name = "UE")]
+        public string toString //Affichage de l'UE avec son intitule
         {
             get
             {

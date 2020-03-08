@@ -9,11 +9,11 @@
 
 <h4>Séance</h4>
 <hr />
-@if (Model.testSalle)
+@if (Model.testSalle) //Salle non disponible
 {
     <h5><font color="red">Cette salle n'est pas disponible.</font></h5>
 }
-@if (Model.testGrp)
+@if (Model.testGrp) //Groupe non disponible
 {
     <h5><font color="red">Ce groupe n'est pas disponible.</font></h5>
 }
