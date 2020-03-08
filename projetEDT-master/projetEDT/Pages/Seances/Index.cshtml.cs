@@ -30,7 +30,7 @@ namespace projetEDT.Pages.Seances
                 .Include(s => s.LeGroupe)
                 .Include(s => s.Type)
                 .OrderBy(s => s.Jour)
-                .ThenBy(s => s.HeureDebut)
+                .ThenBy(s => s.HeureDebut.TimeOfDay) //TimeOfDay parce que ce DateTime contient la bonne heure mais aussi le jour ou on a créé la séance
                 .ToListAsync();
         }
     }
