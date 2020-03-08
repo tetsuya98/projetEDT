@@ -72,7 +72,7 @@ namespace projetEDT.Pages.Seances
                 return Page();
             }
 
-            _context.Attach(Seance).State = EntityState.Modified;
+            /*_context.Attach(Seance).State = EntityState.Modified;
 
             try
             {
@@ -90,21 +90,23 @@ namespace projetEDT.Pages.Seances
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index");*/
 
-            /*DateTime lejour = Seance.Jour;
+            DateTime lejour = Seance.Jour;
             int idsalle = Seance.SalleID;
             int idgrp = (int)Seance.GroupeID;
             DateTime lheure = Seance.HeureDebut;
+            int? SID = Seance.ID;
             int cpt = 0;
             int cpt2 = 0;
 
             var seance = from s in _context.Seance where s.Jour == lejour select s;
             seance = seance.Where(s => s.SalleID == idsalle); //Toute les séance avec la même salle le même jour
+            seance = seance.Where(s => s.ID != SID); //Pour qu'il puisse se sauvegarder sans modification
 
             foreach (Seance item in seance) //Vérifie que 2 séances avec la même salle ne se chevauche pas
             {
-                var diff = (item.HeureDebut - Seance.HeureDebut).TotalHours;
+                var diff = (item.HeureDebut.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours;
                 if (diff != 0)
                 {
                     if (diff < Seance.Duree && diff > 0)
@@ -119,15 +121,20 @@ namespace projetEDT.Pages.Seances
                     }
 
                 }
+                else
+                {
+                    cpt += 1;
+                }
 
             }
 
             seance = from s in _context.Seance where s.Jour == lejour select s;
             seance = seance.Where(s => s.GroupeID == idgrp); //Toute les séance avec le même groupe le même jour
+            seance = seance.Where(s => s.ID != SID); //Pour qu'il puisse se sauvegarder sans modification
 
             foreach (Seance item in seance) //Vérifie que 2 séances avec le même groupe ne se chevauche pas
             {
-                var diff = (item.HeureDebut - Seance.HeureDebut).TotalHours; //différence entre les herues de début
+                var diff = (item.HeureDebut.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours; //différence entre les herues de début
                 if (diff != 0)
                 {
                     if (diff < Seance.Duree && diff > 0)
@@ -139,6 +146,10 @@ namespace projetEDT.Pages.Seances
                         cpt2 += 1;
                     }
 
+                }
+                else
+                {
+                    cpt2 += 1;
                 }
 
             }
@@ -177,9 +188,11 @@ namespace projetEDT.Pages.Seances
                     testGrp = true;
                 }
 
-                OnGetAsync(Seance.ID);
+                _context.Attach(Seance).State = EntityState.Modified;
+                
+                OnGetAsync(SID);
                 return Page();
-            }*/
+            }
 
 
         }

@@ -76,7 +76,9 @@ namespace projetEDT.Pages.Seances
 
             foreach (Seance item in seance) //Vérifie que 2 séances avec la même salle ne se chevauche pas
             {
-                var diff = (item.HeureDebut - Seance.HeureDebut).TotalHours;
+
+                var diff = (item.HeureDebut.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours;
+                Console.WriteLine("diff : {0}", diff);
                 if (diff != 0)
                 {
                     if (diff < Seance.Duree && diff > 0)
@@ -90,6 +92,9 @@ namespace projetEDT.Pages.Seances
                         //Console.WriteLine("cpt : {0}, diff : {1}, cette seance : {2}, les seances : {3}, duree {4}", cpt, diff, Seance.HeureDebut, item.HeureDebut, item.Duree);
                     }
                     
+                }else
+                {
+                    cpt += 1;
                 }
 
             }
@@ -99,7 +104,7 @@ namespace projetEDT.Pages.Seances
 
             foreach (Seance item in seance) //Vérifie que 2 séances avec le même groupe ne se chevauche pas
             {
-                var diff = (item.HeureDebut - Seance.HeureDebut).TotalHours; //différence entre les herues de début
+                var diff = (item.HeureDebut.TimeOfDay - Seance.HeureDebut.TimeOfDay).TotalHours; //différence entre les herues de début
                 if (diff != 0)
                 {
                     if (diff < Seance.Duree && diff > 0)
@@ -110,7 +115,9 @@ namespace projetEDT.Pages.Seances
                     {
                         cpt2 += 1;
                     }
-
+                } else
+                {
+                    cpt2 += 1;
                 }
 
             }
